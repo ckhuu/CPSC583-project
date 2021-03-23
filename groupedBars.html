@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CPSC 583 - Grouped Bar Chart</title>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>CPSC 583: Project Hand-In #3</h1>
+<h3>Carmen Khuu</h3>
+<h4>ID: 10061552</h4>
+<h4><a href="index.html">Side-by-side Bar Chart</a> &nbsp;&nbsp;&nbsp; Grouped Bar Chart &nbsp;&nbsp;&nbsp; <a href="bubbleChart.html">Bubble Plot</a></h4>
+<div style="text-align: center; margin-left: 300px; margin-right: 300px;"><p style="font-family: sans-serif;">Grouped horizontal bars from a dataset of recent college graduates. Each entry is a college major with information regarding the proportion of female graduates, the proportion of median income (compared to the maximum median income in the dataset), proportion of graduate with full-time jobs, proportion of graduates with jobs that required a college degree, and unemployment rate. <br>The values are between 0 and 1.0, which represents 100%.</p></div>
+<div id="legend"></div>
+<div id="container"></div>
+<script>
+
+    // Some example code from the D3.js Graph Gallery was used as a base for the JavaScript in this file
+    // Source: https://www.d3-graph-gallery.com/graph/barplot_grouped_basicWide.html
+
+    // dimensions and margins of the graph
+    var margin = {top: 20, right: 30, bottom: 40, left: 300},
+        width = 1000 - margin.left - margin.right,
+        height = 15000 - margin.top - margin.bottom;
+
+    // append svg
+    var svg = d3.select("#container")
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // svg for legend
+    var svgLegend = d3.select("#legend")
+        .append("svg")
+        .attr("width", 800)
+        .attr("height", 100)
+        .attr("margins", "0,0,0,0")
+        .append("g")
+            .attr("transform", "translate(" + margin.left + ",0)");
+
+    // keys for legend
+    var legendKey = ["Proportion of Women", "Proportion of Median Income (divided by max median income from data)", "Proportion with Full Time Jobs", "Proportion with Jobs Requiring a College Degree", "Unemployment Rate"]
+
+    var legendColours = d3.scaleOrdinal()
+        .domain(legendKey)
+        .range(["#8089b4", "#66C1D2", "#66b369", "#f69431", "#de1f1f"]);
+
+    // add squares into legend to correspond with name
+    var size = 10
+    svgLegend.selectAll("rect")
+        .data(legendKey)
+        .enter()
+        .append("rect")
+            .attr("x", 10)
+            .attr("y", function (d, i) {
+                return 10 + i*(size+7)
+            })
+            .attr("width", size)
+            .attr("height", size)
+            .style("fill", function(d) {
+                return legendColours(d)
+            });
+
+    // add legend title
+    svgLegend.selectAll("text")
+        .data(legendKey)
+        .enter()
+        .append("text")
+            .attr("x", 10 + size*1.2)
+            .attr("y", function(d, i) {
+                return 10 + i*(size+7) + (size/2);
+            })
+            .style("fill", function(d) {
+                return legendColours(d);
+            })
+            .text(function(d) {
+                return d;
+            })
+                .attr("text-anchor", "left")
+                .style("alignment-baseline", "middle")
+                .attr("font-size", "12em");
+
+
+    // parse data
+    d3.csv("recent-grads-cleaned.csv", function(data) {
+
+        // sub groups of columns, slice first two columns off
+        var subgroups = data.columns.slice(2)
+
+        // returns all majors
+        var groups = d3.map(data, function(d){
+            return(d.major)
+        }).keys()
+
+
+        // X axis
+        var xAxis = d3.scaleLinear()
+            .domain([0, 1])
+            .range([0, width]);
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xAxis))
+            .selectAll("text")
+            .attr("transform", "translate(-10,0)rotate(-45)")
+            .style("text-anchor", "end");
+
+        // Y axis
+        var yAxis = d3.scaleBand()
+            .range([0, height])
+            .domain(groups)
+            .padding(0.15);
+        svg.append("g")
+            // .attr("transform", "translate(0," + width + ")")
+            .call(d3.axisLeft(yAxis).tickSize(0));
+            // .call(d3.axisLeft(yAxis));
+
+        // console.log(yAxis.domain());
+
+        // Y axis of bar subgroups
+        var ySubgroup = d3.scaleBand()
+            .domain(subgroups)
+            .range([0, yAxis.bandwidth()])
+            .padding([0.05]);
+
+        // colours of different groups
+        var colours = d3.scaleOrdinal()
+            .domain(subgroups)
+            .range(["#8089b4", "#66C1D2", "#66b369", "#f69431", "#de1f1f"]);
+
+
+        // Show the bars
+        svg.append("g")
+            .selectAll("g")
+            // Enter in data = loop group per group
+            .data(data)
+            .enter()
+            .append("g")
+                .attr("transform", function(d) { return "translate(0, " + yAxis(d.major) + ")"; })
+            .selectAll("rect")
+            .data(function(d) {
+                return subgroups.map(function(key) {
+                    // console.log({key: key, value: +d[key]});
+                    return {key: key, value: +d[key]};
+                });
+            })
+            .enter().append("rect")
+                .attr("y", function(d) {
+                    return ySubgroup(d.key);
+                })
+                .attr("width", function(d) {
+                    // console.log("width: " +  (width - xAxis(d.value)));
+                    return (xAxis(d.value));
+                })
+                .attr("height", ySubgroup.bandwidth())
+                .attr("fill", function(d) {
+                    return colours(d.key);
+                });
+
+
+        // // original, ungrouped bars
+        // // add bars
+        // svg.selectAll("rect")
+        //     .data(data)
+        //     .enter()
+        //     .append("rect")
+        //         .attr("x", xAxis(0.002))
+        //         .attr("y", function(d) {
+        //         return yAxis(d.major);
+        //         })
+        //         .attr("width", function(d) {
+        //         return xAxis(d.women);
+        //         })
+        //         .attr("height", yAxis.bandwidth() )
+        //         .attr("fill", "#69b3a2");
+
+    })
+</script>
+
+</body>
+</html>

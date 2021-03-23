@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CPSC 583 - Bubble Plot</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+</head>
+<body>
+<h1 style="text-align: center">CPSC 583: Project Hand-In #3</h1>
+<h3 style="text-align: center">Carmen Khuu</h3>
+<h4 style="text-align: center">ID: 10061552</h4>
+<h4><a href="index.html">Side-by-side Bar Chart</a> &nbsp;&nbsp;&nbsp; <a href="groupedBars.html">Grouped Bar Chart</a> &nbsp;&nbsp;&nbsp; Bubble Plot</h4>
+<div style="text-align: center;"><p style="font-family: sans-serif;">Bubble chart representing the median income of college graduates vs the percentage of graduates from each major who are full-time employed. <br> The size of the circles represent the percentage of women in each major and the circles are split into colours based on which category the major belongs in.</p></div>
+<div id="bubblePlot"></div>
+
+<script>
+    // Some parts of this code used example code from the D3.js Graph Gallery
+    // Source: https://www.d3-graph-gallery.com/graph/bubble_color.html
+
+    var margin = {top: 10, right: 20, bottom: 30, left: 50},
+        width = 1000 - margin.left - margin.right,
+        height = 450 - margin.top - margin.bottom;
+
+    var svg = d3.select("#bubblePlot")
+        .append("svg")
+            .attr("width", width + margin.left + margin.right + 30)
+            .attr("height", height + margin.top + margin.bottom + 30)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // shift right
+
+    d3.csv("recent-grads-cleaned.csv", function(data) {
+
+        // X axis
+        var xAxis = d3.scaleLinear()
+            .domain([0, 110000]) // max median income = $110,000
+            .range([0, width ]);
+
+        // append X axis to svg
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")") // move axis to the bottom
+            .call(d3.axisBottom(xAxis));
+
+        // Add label for x axis
+        svg.append("text")
+            .attr("transform",
+                "translate(" + (width/2) + " ," +
+                (height + margin.top + 30) + ")")
+            .style("text-anchor", "middle")
+            .text("Median Income ($)");
+
+        // Y axis
+        var yAxis = d3.scaleLinear()
+            .domain([0, 100]) // % of grads employed full time
+            .range([ height, 0]);
+
+        // append Y axis to svg
+        svg.append("g")
+            .call(d3.axisLeft(yAxis));
+
+        // Add label for y axis
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x",0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("% of Graduates Employed full-time");
+
+        // bubble scale
+        var bubbleScale = d3.scaleLinear()
+            .domain([0, 1]) // since the bubble scale shows % of women, 100% is the max
+            .range([5, 20]);
+
+        // Scale for bubble colour
+        var bubbleColours = d3.scaleOrdinal()
+            .domain(d3.map(data, function(d){return d.majorCategory;}).keys())
+            .range(["#3984a8", "#3A7640", "#48aa54", "#9a519a",
+                "#c26360", "#ec741c", "#fe9805", "#ffc81c",
+                "#fff72d", "#c28430", "#ac5b39", "#ed79a6",
+                "#bb8fa5", "#a24058", "#5e6693", "#989999"]);
+
+        // adding circles to the chart
+        svg.append("g")
+            .selectAll("circles")
+            .data(data)
+            .enter()
+            .append("circle")
+                .attr("cx", function (d) {
+                    return xAxis(+d.median*110000);
+                })
+                .attr("cy", function(d) {
+                    return yAxis(+d.fulltime*100);;
+                })
+                .attr("r", function(d) {
+                    return bubbleScale(+d.women);
+                })
+                .style("fill", function(d) {
+                    return bubbleColours(d.majorCategory);
+                })
+                .style("opacity", "0.7")
+                .attr("stroke", "white")
+                .style("stroke-width", "1.5px");
+
+
+        // legend - This utilizes the d3-legend library by Suzie Lu
+        var legend = d3.legendColor()
+            .scale(bubbleColours);
+
+        var svgLegend = d3.select("#bubblePlot")
+            .append("svg")
+            .attr("width", 500)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+                .call(legend)
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+        // //legend
+        // var svgLegend = d3.select("#bubblePlot")
+        //     .append("svg")
+        //     .attr("width", 300)
+        //     .attr("height", height + margin.top + margin.bottom)
+        //     .append("g")
+        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        //
+        // // create squares
+        // var legend = svgLegend.selectAll('rect')
+        //     .data(bubbleColours.domain().reverse())
+        //     .enter()
+        //     .append('rect')
+        //     .attr("x", 50)
+        //     .attr("y", function(d, i) {
+        //         return i * 30;
+        //     })
+        //     .attr("width", 15)
+        //     .attr("height", 15)
+        //     .style("fill", bubbleColours);
+        //
+        // // add text
+        // svgLegend.append("text")
+        //     .attr("class", "legendText")
+        //     .attr("x", 70)
+        //     .attr("y", function(d, i) {
+        //         return i * 30;
+        //     })
+        //     .text(function(d) {
+        //         return (d3.map(data, function(d){return d.majorCategory;}).keys());
+        //     });
+
+    })
+
+</script>
+</body>
+</html>

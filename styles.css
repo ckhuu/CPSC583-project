@@ -1,0 +1,89 @@
+text {
+    font-family: sans-serif;
+}
+h1, h3, h4 {
+    text-align: center;
+    font-family: sans-serif;
+}
+
+/* For grouped bars */
+
+#legend text {
+    font-size: 0.9em;
+}
+
+
+/* For index.html*/
+
+#chartWomen, #chartMedian, #chartFt, #chartCollege, #chartUnemployed {
+    height: 250px;
+    width: 500px;
+}
+
+.topLabel {
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+svg {
+    shape-rendering: crispEdges;
+}
+
+.grouperoo {
+    margin: 0;
+}
+
+.value {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.label {
+    font-size: 18px;
+    fill: #333;
+}
+
+.line {
+    margin: 10px 0px;
+    stroke: #cccccc;
+}
+
+.line line {
+    stroke-width: 1;
+    stroke: rgba(0, 0, 0, 0.1);
+}
+
+#majors{
+    font-size: 11px;
+}
+
+/* For bubble chart */
+
+g.cell text.label {
+    font-size: 1em;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+/*
+svg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 10px;
+    height: 100%;
+    width: 100%;
+}
+ */
