@@ -58,12 +58,6 @@ svg {
     font-size: 11px;
 }
 
-/* For bubble chart */
-
-g.cell text.label {
-    font-size: 1em;
-}
-
 div.tooltip {
     position: absolute;
     text-align: center;
@@ -75,6 +69,12 @@ div.tooltip {
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
+}
+
+/* For bubble chart */
+
+g.cell text.label {
+    font-size: 1em;
 }
 
 /*

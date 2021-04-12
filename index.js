@@ -17,16 +17,20 @@ const render = data => {
 
     // var max = 1;
 
+    // Define the div for the tooltip
+    var divToolTip = d3.select("body").append("div").attr("class", "tooltip")
+        .style("opacity", 0);
+
     /** Code to generate first set of bars - women's share **/
 
     // add svg
-    svgWomen = d3.select(chartWomen)
+    var svgWomen = d3.select(chartWomen)
         .append("svg")
         .attr("width", width)
         .attr("height", height);
 
     // create bars
-    barWomen = svgWomen.selectAll("g")
+    var barWomen = svgWomen.selectAll("g")
         .data(data)
         .enter()
         .append("g");
@@ -61,11 +65,11 @@ const render = data => {
     //     labelWidth2 = Math.ceil(Math.max(labelWidth2+5, this.getBBox().width));
     // });
 
-    scaleWomen = d3.scaleLinear()
+    var scaleWomen = d3.scaleLinear()
         .domain([0, 1])
         .range([0, width - margin*2 - labelWidth1]);
 
-    xAxis1 = d3.axisBottom()
+    var xAxis1 = d3.axisBottom()
         .scale(scaleWomen)
         .tickSize(-height + 2*margin + axisMargin);
 
@@ -75,7 +79,20 @@ const render = data => {
         .attr("width", function(d){
             return scaleWomen(d.women);
         })
-        .attr("fill", "#b09cff");
+        .attr("fill", "#b09cff")
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html((d3.format(".3n")(d.women*100)) + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 
     // text for label overlapping the bar
     barWomen.append("text")
@@ -91,6 +108,19 @@ const render = data => {
         .attr("x", function(d){
             var width = this.getBBox().width;
             return Math.max(width + valueMargin, scaleWomen(d.women));
+        })
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html((d3.format(".3n")(d.women*100)) + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
 
     svgWomen.insert("g",":first-child")
@@ -120,13 +150,13 @@ const render = data => {
 
 
     // add svg
-    svgMedian = d3.select(chartMedian)
+    var svgMedian = d3.select(chartMedian)
         .append("svg")
         .attr("width", width)
         .attr("height", height);
 
     // create bars
-    barMedian = svgMedian.selectAll("g")
+    var barMedian = svgMedian.selectAll("g")
         .data(data)
         .enter()
         .append("g");
@@ -137,25 +167,9 @@ const render = data => {
             return "translate(" + 0 + "," + (i * (barHeight + barPadding) + barPadding) + ")";
         });
 
-// // append y axis label for majors
-// barMedian.append("text")
-//     .attr("class", "label")
-//     .attr("id", "majors")
-//     .attr("y", barHeight / 2)
-//     .attr("dy", ".35em") //vertical align middle
-//     .text(function(d){
-//         return (d.major);
-//     }).each(function() {
-//     labelWidth1 = Math.ceil(Math.max(labelWidth1, this.getBBox().width));
-// });
-
     scaleMedian = d3.scaleLinear()
         .domain([0, 1])
         .range([0, width - margin*2 - labelWidth]);
-
-// xAxis2 = d3.axisBottom()
-//     .scale(scaleMedian)
-//     .tickSize(-height + 2*margin + axisMargin);
 
     barMedian.append("rect")
         .attr("transform", "translate("+(labelWidth)+", 0)")
@@ -163,7 +177,20 @@ const render = data => {
         .attr("width", function(d){
             return scaleMedian(d.median);
         })
-        .attr("fill", "#66C1D2");;
+        .attr("fill", "#66C1D2")
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html("$" + (d3.format(",d")(d.median*110000)))
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 
     // text for label overlapping the bar
     barMedian.append("text")
@@ -179,6 +206,19 @@ const render = data => {
         .attr("x", function(d){
             var width = this.getBBox().width;
             return Math.max(width + valueMargin, scaleMedian(d.median));
+        })
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html("$" + (d3.format(",d")(d.median*110000)))
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
 
     svgMedian.insert("g",":first-child")
@@ -229,7 +269,20 @@ const render = data => {
         .attr("width", function(d){
             return scaleFt(d.fulltime);
         })
-        .attr("fill", "#A2C6A1");;
+        .attr("fill", "#A2C6A1")
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html((d3.format(".3n")(d.fulltime*100)) + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 
     // text for label overlapping the bar
     barFt.append("text")
@@ -245,6 +298,19 @@ const render = data => {
         .attr("x", function(d){
             var width = this.getBBox().width;
             return Math.max(width + valueMargin, scaleFt(d.fulltime));
+        })
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html((d3.format(".3n")(d.fulltime*100)) + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
 
     svgFt.insert("g",":first-child")
@@ -295,7 +361,20 @@ const render = data => {
         .attr("width", function(d){
             return scaleCollege(d.college);
         })
-        .attr("fill", "#f0a156");;
+        .attr("fill", "#f0a156")
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html(d3.format(".3n")(d.college*100) + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 
     // text for label overlapping the bar
     barCollege.append("text")
@@ -311,6 +390,19 @@ const render = data => {
         .attr("x", function(d){
             var width = this.getBBox().width;
             return Math.max(width + valueMargin, scaleCollege(d.college));
+        })
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html(d3.format(".3n")(d.college*100) + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
 
     svgCollege.insert("g",":first-child")
@@ -362,7 +454,20 @@ const render = data => {
         .attr("width", function(d){
             return scaleUnemployed(d.unemploymentRate);
         })
-        .attr("fill", "#c0392b");;
+        .attr("fill", "#c0392b")
+        .on("mouseover", function(d) {
+            divToolTip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            divToolTip.html(d3.format(".3n")(d.unemploymentRate*100) + "%")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            divToolTip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 
 // text for label overlapping the bar
     barUnemployed.append("text")
