@@ -6,6 +6,10 @@ h1, h3, h4 {
     font-family: sans-serif;
 }
 
+body {
+    padding-top: 30px;
+}
+
 /* For grouped bars */
 
 #legend text {
@@ -15,15 +19,27 @@ h1, h3, h4 {
 
 /* For index.html*/
 
+.filterMenu {
+    padding-left: 100px;
+    padding-right: 100px;
+    text-align: center;
+}
+
 #chartWomen, #chartMedian, #chartFt, #chartCollege, #chartUnemployed {
     height: 250px;
     width: 500px;
+    padding-left: 3%;
+    padding-right: 3%
 }
 
 .topLabel {
     text-align: center;
     font-family: sans-serif;
     font-weight: bold;
+}
+
+.filterMenu {
+    font-family: sans-serif;
 }
 
 svg {

@@ -13,7 +13,12 @@
 <h4>Side-by-side Bar Chart &nbsp;&nbsp;&nbsp; <a href="groupedBars.html">Grouped Bar Chart</a> &nbsp;&nbsp;&nbsp; <a href="bubbleChart.html">Bubble Plot</a></h4>
 <div class="outerDiv" style="min-width: 700px">
     <div style="margin: 30px; text-align: center;"><p style="font-family: sans-serif;">Side-by-side bars showing stats from the American Community Survey 2010-2012 Public Use Microdata Series, which contains data of recent college graduates. <br>For each major, each column displays proportional data of the proportion of female graduates, median income (in comparison to the maximum median of $110,000 in the dataset), proportion of graduates employed full-time, proportion of graduates with a job that requires a degree, and the unemployment rate.</p></div>
-    <p class="filterMenu">
+    <p class="filterMenu" style="font-size: 1em">
+        Major Category:
+        <select id="major-dropdown" style="font-size: 1em">
+        </select>
+
+        Sort:
         <select class="sort-dropdown" style="font-size: 1em">
             <option value="women-asc">Percentage women (ascending)</option>
             <option value="women-desc">Percentage women (descending)</option>
@@ -36,11 +41,11 @@
         <div style="width: 15%; float: left; color: #c0392b;" class="topLabel" id="labelUnemployed">Unemployment Rate</div>
     </div>
     <div style="width: 100%">
-        <div style="width: 30%; float: left;" id="chartWomen"></div>
-        <div style="width: 15%; float: left;" id="chartMedian"></div>
-        <div style="width: 15%; float: left;" id="chartFt"></div>
-        <div style="width: 15%; float: left;" id="chartCollege"></div>
-        <div style="width: 15%; float: left;" id="chartUnemployed"></div>
+        <div style="width: 25%; float: left;" id="chartWomen"></div>
+        <div style="width: 10%; float: left;" id="chartMedian"></div>
+        <div style="width: 10%; float: left;" id="chartFt"></div>
+        <div style="width: 10%; float: left;" id="chartCollege"></div>
+        <div style="width: 10%; float: left;" id="chartUnemployed"></div>
     </div>
 </div>
 <script src="index.js"></script>

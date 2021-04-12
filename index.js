@@ -499,7 +499,43 @@ const render = data => {
     /** End of unemployment rate code **/
 
 
+    // List of majors
+    var allMajors = ["Select a Major", "Agriculture & Natural Resources", "Arts", "Biology & Life Science", "Business", "Communications & Journalism",
+            "Computers & Mathematics", "Education", "Engineering", "Health", "Humanities & Liberal Arts", "Industrial Arts & Consumer Services",
+            "Interdisciplinary", "Law & Public Policy", "Physical Sciences", "Psychology & Social Work", "Social Science"]
 
+    // add the options to the majors dropdown button
+    d3.select("#major-dropdown")
+        .selectAll('myOptions')
+        .data(allMajors)
+        .enter()
+        .append('option')
+        .text(function (d) { return d; }) // text showed in the menu
+        .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    d3.select("#major-dropdown").on("change", function(d) {
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        // update(selectedOption)
+        var dataFilter = data.map(function(d){return d.majorCategory === selectedOption })
+        let testNum = 1
+        for (var boop = 0; boop < dataFilter.length; boop++) {
+            if(dataFilter[boop] == true) {
+                console.log(testNum + ": " + data[boop].major);
+                testNum++;
+            }
+        }
+    });
+
+
+
+    function update(selectedGroup) {
+        console.log("selected: " + selectedGroup);
+        for (var i = 0; i < data.length; i++) {
+            console.log(data.major);
+        }
+    }
 }
 
 // parse and render csv
@@ -512,6 +548,7 @@ d3.csv("recent-grads-cleaned.csv")
         d.fulltime = +d.fulltime;
         d.college = +d.college;
         d.unemploymentRate = +d.unemploymentRate;
+        d.majorCategory = d.majorCategory;
     });
     // console.log(data);
     render(data);
