@@ -61,11 +61,12 @@ svg {
 div.tooltip {
     position: absolute;
     text-align: center;
-    width: 60px;
-    height: 28px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
+    width: 80px;
+    height: 25px;
+    padding: 15px 2px 10px 2px;
+    font: 1em sans-serif;
+    color: white;
+    background: rgba(0, 0, 0, 0.9);
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
