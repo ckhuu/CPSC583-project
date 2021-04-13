@@ -15,6 +15,8 @@ const render = data => {
         barPadding = (height-axisMargin-margin*2)*0.4/data.length, // increase the padding by increasing the decimal value
         data, bar, svg, scale, xAxis, labelWidth1 = 0, labelWidth2 = 0;
 
+    var selectedOption = "All Majors";
+
     // var max = 1;
 
     // Define the div for the tooltip
@@ -516,9 +518,10 @@ const render = data => {
         .text(function (d) { return d; }) // text showed in the menu
         .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
+    // event upon selecting a dropdown option
     d3.select("#major-dropdown").on("change", function(d) {
         // recover the option that has been chosen
-        var selectedOption = d3.select(this).property("value")
+        selectedOption = d3.select(this).property("value")
         // run the updateChart function with this selected option
         updateFilter(selectedOption);
     });
@@ -935,6 +938,27 @@ const render = data => {
             .attr("y1", -10).attr("y2", -10);
 
     }
+
+    d3.select("#sortAscending")
+        .on("click", function() {
+            console.log("selected value: " + selectedOption);
+            console.log("sort ascending button selected");
+
+            // don't use filter if all majors are chosen
+            if (selectedOption === "All Majors") {
+                var dataOption = data;
+            } else {
+                var dataOption = data.filter(function(d){return d.majorCategory === selectedOption });
+            }
+
+            var sortedData = dataOption.sort(function(a, b) {
+                return a.women - b.women;
+            });
+
+            redrawBars(sortedData);
+
+            console.log(sortedData);
+        });
 }
 
 function initializeData() {
