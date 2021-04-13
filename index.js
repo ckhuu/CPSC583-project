@@ -522,34 +522,32 @@ const render = data => {
     d3.select("#major-dropdown").on("change", function(d) {
         // recover the option that has been chosen
         selectedOption = d3.select(this).property("value")
-        // run the updateChart function with this selected option
         updateFilter(selectedOption);
+
+        // let filteredData = identifyFilter(selectedOption);
+        // redrawBars(filteredData);
     });
+
+    function identifyFilter(selectedOption) {
+        // don't use filter if all majors are chosen
+        if (selectedOption === "All Majors") {
+            return data;
+        } else {
+            return (data.filter(function(d){return d.majorCategory === selectedOption }));
+        }
+    }
 
     function updateFilter(selectedOption) {
         console.log("selected: " + selectedOption);
 
-        // don't use filter if all majors are chosen
-        if (selectedOption === "All Majors") {
-            var dataFilter = data;
-        } else {
-            var dataFilter = data.filter(function(d){return d.majorCategory === selectedOption });
-        }
+        let dataFilter = identifyFilter(selectedOption);
 
-        // console.log(dataFilter);
-
-        // test
-        // let testNum = 1
-        // for (let boop = 0; boop < dataFilter.length; boop++) {
-        //     if(dataFilter[boop] === true) {
-        //         console.log(testNum + ": " + data[boop].major);
-        //         testNum++;
-        //     }
+        // // don't use filter if all majors are chosen
+        // if (selectedOption === "All Majors") {
+        //     var dataFilter = data;
+        // } else {
+        //     var dataFilter = data.filter(function(d){return d.majorCategory === selectedOption });
         // }
-
-        // removes the #chartWomen div
-        // d3.select(chartWomen).remove("svg");
-
         redrawBars(dataFilter);
     }
 
@@ -939,25 +937,54 @@ const render = data => {
 
     }
 
-    d3.select("#sortAscending")
+    /** function to sort each column by ascending values **/
+    function sortAscending(dataSort, num) {
+        console.log("selected value: " + selectedOption);
+        console.log("sort ascending button selected");
+        let sortedData;
+
+        // sort ascending % women column
+        if (num == 1) {
+            sortedData = dataSort.sort(function(a, b) {
+                return a.women - b.women;
+            });
+        } else if (num == 2) {
+            // sort ascending Median Income column
+            sortedData = dataSort.sort(function(a, b) {
+                return a.median - b.median;
+            });
+        } else if (num == 3) {
+            // sort ascending % Employed Full-time column
+            sortedData = dataSort.sort(function(a, b) {
+                return a.fulltime - b.fulltime;
+            });
+        } else if (num == 4) {
+            // sort ascending % with Jobs Requiring a Degree column
+            sortedData = dataSort.sort(function(a, b) {
+                return a.college - b.college;
+            });
+        } else {
+            // sort ascending Unemployment Rate column
+            let sortedData = dataSort.sort(function(a, b) {
+                return a.unemploymentRate - b.unemploymentRate;
+            });
+        }
+
+        redrawBars(sortedData);
+
+        console.log(sortedData);
+    }
+
+    d3.select("#sortAscendingWomen")
         .on("click", function() {
             console.log("selected value: " + selectedOption);
             console.log("sort ascending button selected");
 
-            // don't use filter if all majors are chosen
-            if (selectedOption === "All Majors") {
-                var dataOption = data;
-            } else {
-                var dataOption = data.filter(function(d){return d.majorCategory === selectedOption });
-            }
+            let dataOption = identifyFilter(selectedOption);
 
-            var sortedData = dataOption.sort(function(a, b) {
-                return a.women - b.women;
-            });
+            // console.log("data returned: " + dataOption);
 
-            redrawBars(sortedData);
-
-            console.log(sortedData);
+            sortAscending(dataOption, 1);
         });
 }
 
