@@ -347,7 +347,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html((d3.format(".3n")(d.fulltime*100)) + "%")
+            divToolTip.html((d.major) + ":<br/>" + (d3.format(".3n")(d.fulltime*100)) + "% full-time")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
