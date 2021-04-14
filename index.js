@@ -1072,17 +1072,23 @@ const render = data => {
 
     /** resets all button brightness **/
     function resetBtnColor() {
-        d3.select("#sortAscendingWomen").style("background", "#373640");
-        d3.select("#sortAscendingMedian").style("background", "#373640");
-        d3.select("#sortAscendingFt").style("background", "#373640");
-        d3.select("#sortAscendingDegree").style("background", "#373640");
-        d3.select("#sortAscendingUnemp").style("background", "#373640");
+        d3.select("#sortAscendingWomen").style("background", "#b09cff");
+        d3.select("#sortAscendingMedian").style("background", "#4fb0c2");
+        d3.select("#sortAscendingFt").style("background", "#8eb08d");
+        d3.select("#sortAscendingDegree").style("background", "#f0a156");
+        d3.select("#sortAscendingUnemp").style("background", "#c0392b");
 
-        d3.select("#sortDescendingWomen").style("background", "#373640");
-        d3.select("#sortDescendingMedian").style("background", "#373640");
-        d3.select("#sortDescendingFt").style("background", "#373640");
-        d3.select("#sortDescendingDegree").style("background", "#373640");
-        d3.select("#sortDescendingUnemp").style("background", "#373640");
+        d3.select("#sortDescendingWomen").style("background", "#b09cff");
+        d3.select("#sortDescendingMedian").style("background", "#4fb0c2");
+        d3.select("#sortDescendingFt").style("background", "#8eb08d");
+        d3.select("#sortDescendingDegree").style("background", "#f0a156");
+        d3.select("#sortDescendingUnemp").style("background", "#c0392b");
+    }
+
+    /** set button to highlighted colour **/
+    function highlightBtn(buttonId, colour) {
+        var nextColor = buttonId.style.background == colour ? "#373640" : colour;
+        d3.select(buttonId).style("background", nextColor);
     }
 
     /** Button clicks for ascending columns **/
@@ -1100,8 +1106,9 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            // var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
+            // d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#877abf");
 
             sortAscending(dataOption, sortNum);
         });
@@ -1114,8 +1121,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#57828a");
 
             sortAscending(dataOption, sortNum);
         });
@@ -1128,8 +1134,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#697a68");
 
             sortAscending(dataOption, sortNum);
         });
@@ -1142,8 +1147,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#9c7756");
 
             sortAscending(dataOption, sortNum);
         });
@@ -1156,8 +1160,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#8c3c34");
 
             sortAscending(dataOption, sortNum);
         });
@@ -1171,8 +1174,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#877abf");
 
             sortDescending(dataOption, sortNum);
         });
@@ -1185,8 +1187,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#57828a");
 
             sortDescending(dataOption, sortNum);
         });
@@ -1199,8 +1200,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#697a68");
 
             sortDescending(dataOption, sortNum);
         });
@@ -1213,8 +1213,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#9c7756");
 
             sortDescending(dataOption, sortNum);
         });
@@ -1227,8 +1226,7 @@ const render = data => {
 
             // toggle colour
             resetBtnColor();
-            var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            d3.select(this).style("background", nextColor);
+            highlightBtn(this, "#8c3c34");
 
             sortDescending(dataOption, sortNum);
         });

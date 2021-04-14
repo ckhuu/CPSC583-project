@@ -45,23 +45,53 @@ body {
     background: #63686e;
 }
 
+.buttonContainer {
+    display: inline-block;
+    margin: 0 auto;
+}
+
 .buttonDiv {
     margin: 10px 5px 10px 0;
     font-weight: 300;
-    font-size: 0.7em;
+    font-size: 0.8em;
     text-align: center;
     line-height: 25px;
     color: #FFF;
     border-radius: 5px;
     transition: all 0.2s ;
-    background: #373640;
 }
 
 .buttonDiv:hover {
     background: #82888f;
 }
 
+#sortAscendingWomen, #sortDescendingWomen {
+    border-color: #b09cff;
+    background: #b09cff;
+}
+
+#sortAscendingMedian, #sortDescendingMedian {
+    border-color: #4fb0c2;
+    background: #4fb0c2;
+}
+
+#sortAscendingFt, #sortDescendingFt {
+    border-color: #8eb08d;
+    background: #8eb08d;
+}
+
+#sortAscendingDegree, #sortDescendingDegree {
+    border-color: #f0a156;
+    background: #f0a156;
+}
+
+#sortAscendingUnemp, #sortDescendingUnemp {
+    border-color: #c0392b;
+    background: #c0392b;
+}
+
 .filterMenu {
+    margin-bottom: 30px;
     padding-left: 100px;
     padding-right: 100px;
     text-align: center;
