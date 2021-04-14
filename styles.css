@@ -53,6 +53,17 @@ body {
     text-align: center;
 }
 
+/* Make div horizontally scrollable */
+#container {
+    min-width: 1500px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.datadiv {
+    box-sizing: border-box;
+}
+
 #chartWomen, #chartMedian, #chartFt, #chartCollege, #chartUnemployed {
     height: 250px;
     width: 500px;

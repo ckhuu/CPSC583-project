@@ -13,7 +13,7 @@ const render = data => {
         height = chartWomen.clientHeight + 7000,
         barHeight = (height-axisMargin-margin*2)* 0.6/data.length, // determines the height of the bar
         barPadding = (height-axisMargin-margin*2)*0.4/data.length, // increase the padding by increasing the decimal value
-        data, bar, svg, scale, xAxis, labelWidth1 = 0, labelWidth2 = 0;
+        data, bar, svg, scale, xAxis, labelWidth1 = 0, labelWidth2 = 0, labelWidth = 0;;
 
     // default settings for major category and sorting
     var selectedOption = "All Majors";
@@ -25,6 +25,40 @@ const render = data => {
     // Define the div for the tooltip
     var divToolTip = d3.select("body").append("div").attr("class", "tooltip")
         .style("opacity", 0);
+
+    var majorTitles = document.getElementById("majorTitle"),
+        majorWidth = majorTitles.clientWidth,
+        majorHeight = majorTitles.clientHeight + 7200;
+
+    // svg for college major title
+    var svgMajor = d3.select(majorTitles)
+        .append("svg")
+        .attr("width", majorWidth)
+        .attr("height", majorHeight);
+
+    var barMajor = svgMajor.selectAll("g")
+        .data(data)
+        .enter()
+        .append("g");
+
+    barMajor.attr("class", "bar")
+        .attr("cx",0)
+        .attr("transform", function(d, i) {
+            return "translate(" + margin + "," + (i * (barHeight + barPadding) + barPadding) + ")";
+        });
+
+    // append y axis label for majors
+    barMajor.append("text")
+        .attr("class", "label")
+        .attr("id", "majors")
+        .attr("y", barHeight / 2)
+        .attr("dy", ".35em") //vertical align middle
+        .text(function(d){
+            return (d.major);
+        }).each(function() {
+        labelWidth1 = Math.ceil(Math.max(labelWidth1, this.getBBox().width));
+    });
+
 
     /** Code to generate first set of bars - women's share **/
 
@@ -46,17 +80,17 @@ const render = data => {
             return "translate(" + margin + "," + (i * (barHeight + barPadding) + barPadding) + ")";
         });
 
-    // append y axis label for majors
-    barWomen.append("text")
-        .attr("class", "label")
-        .attr("id", "majors")
-        .attr("y", barHeight / 2)
-        .attr("dy", ".35em") //vertical align middle
-        .text(function(d){
-            return (d.major);
-        }).each(function() {
-        labelWidth1 = Math.ceil(Math.max(labelWidth1, this.getBBox().width));
-        });
+    // // append y axis label for majors
+    // barWomen.append("text")
+    //     .attr("class", "label")
+    //     .attr("id", "majors")
+    //     .attr("y", barHeight / 2)
+    //     .attr("dy", ".35em") //vertical align middle
+    //     .text(function(d){
+    //         return (d.major);
+    //     }).each(function() {
+    //     labelWidth1 = Math.ceil(Math.max(labelWidth1, this.getBBox().width));
+    //     });
 
     // // add labels to the left of the bar
     // barWomen.append("text")
@@ -72,14 +106,14 @@ const render = data => {
 
     var scaleWomen = d3.scaleLinear()
         .domain([0, 1])
-        .range([0, width - (margin*1.5) - labelWidth1]);
+        .range([0, width - margin*2 - labelWidth]);
 
     var xAxis1 = d3.axisBottom()
         .scale(scaleWomen)
         .tickSize(-height + 2*margin + axisMargin);
 
     barWomen.append("rect")
-        .attr("transform", "translate("+(labelWidth1)+", 0)")
+        .attr("transform", "translate("+(labelWidth)+", 0)")
         .attr("height", barHeight)
         .attr("width", function(d){
             return scaleWomen(d.women);
@@ -106,7 +140,7 @@ const render = data => {
     barWomen.append("text")
         .attr("class", "value")
         .attr("y", barHeight / 2)
-        .attr("dx", -valueMargin + labelWidth1) //margin right
+        .attr("dx", -valueMargin + labelWidth) //margin right
         .attr("dy", ".35em") //vertical align middle
         .attr("text-anchor", "end")
         .attr("fill", "#5c5282")
@@ -138,7 +172,8 @@ const render = data => {
     // append horizontal lines
     barWomen.append("line")
         .attr("class", "line")
-        .attr("x1", width*2 + labelWidth1)
+        .attr("x0", -50)
+        .attr("x1", width + labelWidth)
         .attr("y1", -10).attr("y2", -10);
 
     /** End of women's share code **/
@@ -150,8 +185,7 @@ const render = data => {
         // margin = 20,
         // valueMargin = 4,
         width2 = chartMedian.clientWidth,
-        height = chartMedian.clientHeight + 7000,
-        labelWidth = 0;
+        height = chartMedian.clientHeight + 7000
     // barHeight = (height-axisMargin-margin*2)* 0.6/data.length, // determines the height of the bar
     // barPadding = (height-axisMargin-margin*2)*0.4/data.length, // increase the padding by increasing the decimal value
     // data, bar, svg, scale, xAxis, labelWidth1 = 0, labelWidth2 = 0;
@@ -566,27 +600,27 @@ const render = data => {
 
     function redrawBars(dataFilter) {
         // removes everything inside the svg for each div
+        svgMajor.selectAll("g").remove("g");
         svgWomen.selectAll("g").remove("g");
         svgMedian.selectAll("g").remove("g");
         svgFt.selectAll("g").remove("g");
         svgCollege.selectAll("g").remove("g");
         svgUnemployed.selectAll("g").remove("g");
 
-        /** Column 1: recreate bars **/
-        // create bars
-        barWomen = svgWomen.selectAll("g")
+        /** Major column: recreate text **/
+        barMajor = svgMajor.selectAll("g")
             .data(dataFilter)
             .enter()
             .append("g");
 
-        barWomen.attr("class", "bar")
+        barMajor.attr("class", "bar")
             .attr("cx",0)
             .attr("transform", function(d, i) {
                 return "translate(" + margin + "," + (i * (barHeight + barPadding) + barPadding) + ")";
             });
 
         // append y axis label for majors
-        barWomen.append("text")
+        barMajor.append("text")
             .attr("class", "label")
             .attr("id", "majors")
             .attr("y", barHeight / 2)
@@ -597,8 +631,21 @@ const render = data => {
             labelWidth1 = Math.ceil(Math.max(labelWidth1, this.getBBox().width));
         });
 
+        /** Column 1: recreate bars **/
+        // create bars
+        barWomen = svgWomen.selectAll("g")
+                .data(dataFilter)
+                .enter()
+                .append("g");
+
+        barWomen.attr("class", "bar")
+            .attr("cx",0)
+            .attr("transform", function(d, i) {
+                return "translate(" + margin + "," + (i * (barHeight + barPadding) + barPadding) + ")";
+            });
+
         barWomen.append("rect")
-            .attr("transform", "translate("+(labelWidth1)+", 0)")
+            .attr("transform", "translate("+(labelWidth)+", 0)")
             .attr("height", barHeight)
             .attr("width", function(d){
                 return scaleWomen(d.women);
@@ -625,7 +672,7 @@ const render = data => {
         barWomen.append("text")
             .attr("class", "value")
             .attr("y", barHeight / 2)
-            .attr("dx", -valueMargin + labelWidth1) //margin right
+            .attr("dx", -valueMargin + labelWidth) //margin right
             .attr("dy", ".35em") //vertical align middle
             .attr("text-anchor", "end")
             .attr("fill", "#5c5282")
@@ -657,7 +704,8 @@ const render = data => {
         // append horizontal lines
         barWomen.append("line")
             .attr("class", "line")
-            .attr("x1", width*2 + labelWidth1)
+            .attr("x0", -50)
+            .attr("x1", width + labelWidth)
             .attr("y1", -10).attr("y2", -10);
 
 
