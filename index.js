@@ -15,7 +15,10 @@ const render = data => {
         barPadding = (height-axisMargin-margin*2)*0.4/data.length, // increase the padding by increasing the decimal value
         data, bar, svg, scale, xAxis, labelWidth1 = 0, labelWidth2 = 0;
 
+    // default settings for major category and sorting
     var selectedOption = "All Majors";
+    var sortNum = 2;
+    var isDescending = true;
 
     // var max = 1;
 
@@ -69,7 +72,7 @@ const render = data => {
 
     var scaleWomen = d3.scaleLinear()
         .domain([0, 1])
-        .range([0, width - margin*2 - labelWidth1]);
+        .range([0, width - (margin*1.5) - labelWidth1]);
 
     var xAxis1 = d3.axisBottom()
         .scale(scaleWomen)
@@ -135,7 +138,7 @@ const render = data => {
     // append horizontal lines
     barWomen.append("line")
         .attr("class", "line")
-        .attr("x1", width + labelWidth1)
+        .attr("x1", width*2 + labelWidth1)
         .attr("y1", -10).attr("y2", -10);
 
     /** End of women's share code **/
@@ -146,7 +149,7 @@ const render = data => {
         // axisMargin = 20,
         // margin = 20,
         // valueMargin = 4,
-        width = chartMedian.clientWidth,
+        width2 = chartMedian.clientWidth,
         height = chartMedian.clientHeight + 7000,
         labelWidth = 0;
     // barHeight = (height-axisMargin-margin*2)* 0.6/data.length, // determines the height of the bar
@@ -157,7 +160,7 @@ const render = data => {
     // add svg
     var svgMedian = d3.select(chartMedian)
         .append("svg")
-        .attr("width", width)
+        .attr("width", width2)
         .attr("height", height);
 
     // create bars
@@ -174,7 +177,7 @@ const render = data => {
 
     scaleMedian = d3.scaleLinear()
         .domain([0, 1])
-        .range([0, width - margin*2 - labelWidth]);
+        .range([0, width2 - margin*2 - labelWidth]);
 
     barMedian.append("rect")
         .attr("transform", "translate("+(labelWidth)+", 0)")
@@ -233,7 +236,7 @@ const render = data => {
     // append lines
     barMedian.append("line")
         .attr("class", "line")
-        .attr("x0", -10)
+        .attr("x0", -50)
         .attr("x1", width + labelWidth)
         .attr("y1", -10).attr("y2", -10);
 
@@ -498,7 +501,7 @@ const render = data => {
     barUnemployed.append("line")
         .attr("class", "line")
         .attr("x0", -10)
-        .attr("x1", width + labelWidth)
+        .attr("x1", width/1.5)
         .attr("y1", -10).attr("y2", -10);
 
     /** End of unemployment rate code **/
@@ -528,6 +531,7 @@ const render = data => {
         // redrawBars(filteredData);
     });
 
+    /** Identify what to filter the data by based on the dropdown menu **/
     function identifyFilter(selectedOption) {
         // don't use filter if all majors are chosen
         if (selectedOption === "All Majors") {
@@ -539,8 +543,17 @@ const render = data => {
 
     function updateFilter(selectedOption) {
         console.log("selected: " + selectedOption);
-
         let dataFilter = identifyFilter(selectedOption);
+
+        // if it's being sorted by descending, keep the sort
+        if (isDescending) {
+            sortDescending(dataFilter, sortNum);
+        } else {
+            // if it's not being sorted by descending, keep ascending sort
+            sortAscending(dataFilter, sortNum);
+        }
+
+
 
         // // don't use filter if all majors are chosen
         // if (selectedOption === "All Majors") {
@@ -548,7 +561,7 @@ const render = data => {
         // } else {
         //     var dataFilter = data.filter(function(d){return d.majorCategory === selectedOption });
         // }
-        redrawBars(dataFilter);
+        // redrawBars(dataFilter);
     }
 
     function redrawBars(dataFilter) {
@@ -644,7 +657,7 @@ const render = data => {
         // append horizontal lines
         barWomen.append("line")
             .attr("class", "line")
-            .attr("x1", width + labelWidth1)
+            .attr("x1", width*2 + labelWidth1)
             .attr("y1", -10).attr("y2", -10);
 
 
@@ -718,8 +731,8 @@ const render = data => {
         // append lines
         barMedian.append("line")
             .attr("class", "line")
-            .attr("x0", -10)
-            .attr("x1", width + labelWidth)
+            .attr("x0", -50)
+            .attr("x1", width2 + labelWidth)
             .attr("y1", -10).attr("y2", -10);
 
         /** Column 3: recreate bars **/
@@ -928,11 +941,11 @@ const render = data => {
             .attr("class", "axis")
             .attr("transform", "translate(" + (margin + labelWidth) + ","+ (height - axisMargin - margin)+")");
 
-// append lines
+        // append lines
         barUnemployed.append("line")
             .attr("class", "line")
             .attr("x0", -10)
-            .attr("x1", width + labelWidth)
+            .attr("x1", width/1.5)
             .attr("y1", -10).attr("y2", -10);
 
     }
@@ -965,16 +978,49 @@ const render = data => {
             });
         } else {
             // sort ascending Unemployment Rate column
-            let sortedData = dataSort.sort(function(a, b) {
+            sortedData = dataSort.sort(function(a, b) {
                 return a.unemploymentRate - b.unemploymentRate;
             });
         }
 
         redrawBars(sortedData);
-
-        console.log(sortedData);
+        // console.log(sortedData);
     }
 
+    /** Sorts each column by descending values **/
+    function sortDescending(dataSort, num) {
+        let sortedData;
+
+        if (num == 1) {
+            sortedData = dataSort.sort(function(a, b) {
+                return b.women - a.women;
+            });
+        } else if (num == 2) {
+            // sort ascending Median Income column
+            sortedData = dataSort.sort(function(a, b) {
+                return b.median - a.median;
+            });
+        } else if (num == 3) {
+            // sort ascending % Employed Full-time column
+            sortedData = dataSort.sort(function(a, b) {
+                return b.fulltime - a.fulltime;
+            });
+        } else if (num == 4) {
+            // sort ascending % with Jobs Requiring a Degree column
+            sortedData = dataSort.sort(function(a, b) {
+                return b.college - a.college;
+            });
+        } else {
+            // sort ascending Unemployment Rate column
+            sortedData = dataSort.sort(function(a, b) {
+                return b.unemploymentRate - a.unemploymentRate;
+            });
+        }
+
+        redrawBars(sortedData);
+    }
+
+    /** Button clicks for ascending columns **/
     d3.select("#sortAscendingWomen")
         .on("click", function() {
             console.log("selected value: " + selectedOption);
@@ -984,8 +1030,84 @@ const render = data => {
 
             // console.log("data returned: " + dataOption);
 
-            sortAscending(dataOption, 1);
+            sortNum = 1;
+            isDescending = false;
+            sortAscending(dataOption, sortNum);
         });
+
+    d3.select("#sortAscendingMedian")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 2;
+            isDescending = false;
+            sortAscending(dataOption, sortNum);
+        });
+
+    d3.select("#sortAscendingFt")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 3;
+            isDescending = false;
+            sortAscending(dataOption, sortNum);
+        });
+
+    d3.select("#sortAscendingDegree")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 4;
+            isDescending = false;
+            sortAscending(dataOption, sortNum);
+        });
+
+    d3.select("#sortAscendingUnemp")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 5;
+            isDescending = false;
+            sortAscending(dataOption, sortNum);
+        });
+
+    /** Button click for descending columns **/
+    d3.select("#sortDescendingWomen")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 1;
+            isDescending = true;
+            sortDescending(dataOption, sortNum);
+        });
+
+    d3.select("#sortDescendingMedian")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 2;
+            isDescending = true;
+            sortDescending(dataOption, sortNum);
+        });
+
+    d3.select("#sortDescendingFt")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 3;
+            isDescending = true;
+            sortDescending(dataOption, sortNum);
+        });
+
+    d3.select("#sortDescendingDegree")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 4;
+            isDescending = true;
+            sortDescending(dataOption, sortNum);
+        });
+
+    d3.select("#sortDescendingUnemp")
+        .on("click", function() {
+            let dataOption = identifyFilter(selectedOption);
+            sortNum = 5;
+            isDescending = true;
+            sortDescending(dataOption, sortNum);
+        });
+
 }
 
 function initializeData() {

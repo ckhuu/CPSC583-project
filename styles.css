@@ -19,6 +19,19 @@ body {
 
 /* For index.html*/
 
+#major-dropdown {
+    top: 0;
+    padding: 5px 5px;
+    height: 40px;
+    background: #373640;
+    color: #FFF;
+    border: 0 none;
+}
+
+#major-dropdown:hover {
+    background: #63686e;
+}
+
 .buttonDiv {
     margin: 10px 20px 10px 0;
     font-weight: 600;
@@ -27,11 +40,11 @@ body {
     color: #FFF;
     border-radius: 5px;
     transition: all 0.2s ;
-    background: #333333;
+    background: #373640;
 }
 
 .buttonDiv:hover {
-    background: darkgray;
+    background: #82888f;
 }
 
 .filterMenu {
@@ -59,6 +72,10 @@ body {
 
 svg {
     shape-rendering: crispEdges;
+}
+
+.bar rect {
+    padding-left: 5px;
 }
 
 .grouperoo {
