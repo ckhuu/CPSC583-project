@@ -53,6 +53,8 @@ const render = data => {
         .attr("id", "majors")
         .attr("y", barHeight / 2)
         .attr("dy", ".35em") //vertical align middle
+        .attr("overflow-wrap", "break-word")
+        .attr("word-wrap", "break-word")
         .text(function(d){
             return (d.major);
         }).each(function() {
@@ -126,7 +128,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html((d3.format(".3n")(d.women*100)) + "%")
+            divToolTip.html((d.major) + ":<br/>" + (d3.format(".3n")(d.women*100)) + "% women")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -155,7 +157,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html((d3.format(".3n")(d.women*100)) + "%")
+            divToolTip.html((d.major) + ":<br/>" + (d3.format(".3n")(d.women*100)) + "% women")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -224,7 +226,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html("$" + (d3.format(",d")(d.median*110000)))
+            divToolTip.html((d.major) + ":<br/>" + "$" + (d3.format(",d")(d.median*110000)) + " median income")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -253,7 +255,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html("$" + (d3.format(",d")(d.median*110000)))
+            divToolTip.html((d.major) + ":<br/>" + "$" + (d3.format(",d")(d.median*110000)) + " median income")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -316,7 +318,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html((d3.format(".3n")(d.fulltime*100)) + "%")
+            divToolTip.html((d.major) + ":<br/>" + (d3.format(".3n")(d.fulltime*100)) + "% full-time")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -408,7 +410,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html(d3.format(".3n")(d.college*100) + "%")
+            divToolTip.html((d.major) + ":<br/>" + d3.format(".3n")(d.college*100) + "% jobs requiring degree")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -437,7 +439,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html(d3.format(".3n")(d.college*100) + "%")
+            divToolTip.html((d.major) + ":<br/>" + d3.format(".3n")(d.college*100) + "% jobs requiring degree")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -461,7 +463,7 @@ const render = data => {
     /** End of percentage college jobs code **/
 
 
-    /** Code for fifth column of bars - Unemploymen Rate **/
+    /** Code for fifth column of bars - Unemployment Rate **/
     var chartUnemployed = document.getElementById("chartUnemployed"),
         width = chartUnemployed.clientWidth,
         height = chartUnemployed.clientHeight + 7000,
@@ -501,7 +503,7 @@ const render = data => {
             divToolTip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            divToolTip.html(d3.format(".3n")(d.unemploymentRate*100) + "%")
+            divToolTip.html((d.major) + ":<br/>" + d3.format(".3n")(d.unemploymentRate*100) + "% unemployment rate")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -658,7 +660,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html((d3.format(".3n")(d.women*100)) + "%")
+                divToolTip.html((d.major) + ":<br/>" + (d3.format(".3n")(d.women*100)) + "% women")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -687,7 +689,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html((d3.format(".3n")(d.women*100)) + "%")
+                divToolTip.html((d.major) + ":<br/>" + (d3.format(".3n")(d.women*100)) + "% women")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -733,7 +735,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html("$" + (d3.format(",d")(d.median*110000)))
+                divToolTip.html((d.major) + ":<br/>" + "$" + (d3.format(",d")(d.median*110000)) + " median income")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -762,7 +764,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html("$" + (d3.format(",d")(d.median*110000)))
+                divToolTip.html((d.major) + ":<br/>" + "$" + (d3.format(",d")(d.median*110000)) + " median income")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -809,7 +811,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html((d3.format(".3n")(d.fulltime*100)) + "%")
+                divToolTip.html((d.major) + ":<br/>" + (d3.format(".3n")(d.fulltime*100)) + "% full-time")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -838,7 +840,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html((d3.format(".3n")(d.fulltime*100)) + "%")
+                divToolTip.html((d.major) + ":<br/>" + (d3.format(".3n")(d.fulltime*100)) + "% full-time")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -884,7 +886,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html(d3.format(".3n")(d.college*100) + "%")
+                divToolTip.html((d.major) + ":<br/>" + d3.format(".3n")(d.college*100) + "% jobs requiring degree")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -913,7 +915,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html(d3.format(".3n")(d.college*100) + "%")
+                divToolTip.html((d.major) + ":<br/>" + d3.format(".3n")(d.college*100) + "% jobs requiring degree")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -959,7 +961,7 @@ const render = data => {
                 divToolTip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                divToolTip.html(d3.format(".3n")(d.unemploymentRate*100) + "%")
+                divToolTip.html((d.major) + ":<br/>" + d3.format(".3n")(d.unemploymentRate*100) + "% unemployment rate")
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
