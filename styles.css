@@ -1,13 +1,26 @@
+@font-face {
+    font-family: Quicksand-Reg;
+    src: url('Quicksand-Regular.otf');
+}
+
+@font-face {
+    font-family: Quicksand-Bold;
+    src: url('Quicksand-Bold.otf');
+}
+
 text {
     font-family: sans-serif;
 }
 h1, h3, h4 {
     text-align: center;
-    font-family: sans-serif;
+    font-family: Quicksand-Bold, sans-serif;
+    color: #373640;
 }
 
 body {
     padding-top: 30px;
+    background: #fbf7f2;
+    font-family: Quicksand-Reg, sans-serif;
 }
 
 /* For grouped bars */
@@ -79,7 +92,7 @@ body {
 
 .topLabel {
     text-align: center;
-    font-family: sans-serif;
+    font-family: Quicksand-Bold, sans-serif;
     font-weight: bold;
 }
 
