@@ -20,8 +20,6 @@ const render = data => {
     var sortNum = 2;
     var isDescending = true;
 
-    // var max = 1;
-
     // Define the div for the tooltip
     var divToolTip = d3.select("body").append("div").attr("class", "tooltip")
         .style("opacity", 0);
@@ -81,30 +79,6 @@ const render = data => {
         .attr("transform", function(d, i) {
             return "translate(" + margin + "," + (i * (barHeight + barPadding) + barPadding) + ")";
         });
-
-    // // append y axis label for majors
-    // barWomen.append("text")
-    //     .attr("class", "label")
-    //     .attr("id", "majors")
-    //     .attr("y", barHeight / 2)
-    //     .attr("dy", ".35em") //vertical align middle
-    //     .text(function(d){
-    //         return (d.major);
-    //     }).each(function() {
-    //     labelWidth1 = Math.ceil(Math.max(labelWidth1, this.getBBox().width));
-    //     });
-
-    // // add labels to the left of the bar
-    // barWomen.append("text")
-    //     .attr("class", "label")
-    //     .attr("x", 300)
-    //     .attr("y", barHeight / 2)
-    //     .attr("dy", ".35em") //vertical align middle
-    //     .text(function(d){
-    //         return (d.women*100) + "%";
-    //     }).each(function() {
-    //     labelWidth2 = Math.ceil(Math.max(labelWidth2+5, this.getBBox().width));
-    // });
 
     var scaleWomen = d3.scaleLinear()
         .domain([0, 1])
@@ -183,15 +157,8 @@ const render = data => {
 
     /** Code to create second column of bars - Median income **/
     var chartMedian = document.getElementById("chartMedian"),
-        // axisMargin = 20,
-        // margin = 20,
-        // valueMargin = 4,
         width2 = chartMedian.clientWidth,
         height = chartMedian.clientHeight + 7000
-    // barHeight = (height-axisMargin-margin*2)* 0.6/data.length, // determines the height of the bar
-    // barPadding = (height-axisMargin-margin*2)*0.4/data.length, // increase the padding by increasing the decimal value
-    // data, bar, svg, scale, xAxis, labelWidth1 = 0, labelWidth2 = 0;
-
 
     // add svg
     var svgMedian = d3.select(chartMedian)
@@ -578,7 +545,6 @@ const render = data => {
     }
 
     function updateFilter(selectedOption) {
-        console.log("selected: " + selectedOption);
         let dataFilter = identifyFilter(selectedOption);
 
         // if it's being sorted by descending, keep the sort
@@ -588,16 +554,6 @@ const render = data => {
             // if it's not being sorted by descending, keep ascending sort
             sortAscending(dataFilter, sortNum);
         }
-
-
-
-        // // don't use filter if all majors are chosen
-        // if (selectedOption === "All Majors") {
-        //     var dataFilter = data;
-        // } else {
-        //     var dataFilter = data.filter(function(d){return d.majorCategory === selectedOption });
-        // }
-        // redrawBars(dataFilter);
     }
 
     function redrawBars(dataFilter) {
@@ -1002,8 +958,6 @@ const render = data => {
 
     /** function to sort each column by ascending values **/
     function sortAscending(dataSort, num) {
-        console.log("selected value: " + selectedOption);
-        console.log("sort ascending button selected");
         let sortedData;
 
         // sort ascending % women column
@@ -1034,7 +988,6 @@ const render = data => {
         }
 
         redrawBars(sortedData);
-        // console.log(sortedData);
     }
 
     /** Sorts each column by descending values **/
@@ -1094,20 +1047,12 @@ const render = data => {
     /** Button clicks for ascending columns **/
     d3.select("#sortAscendingWomen")
         .on("click", function() {
-            console.log("selected value: " + selectedOption);
-            console.log("sort ascending button selected");
-
             let dataOption = identifyFilter(selectedOption);
-
-            // console.log("data returned: " + dataOption);
-
             sortNum = 1;
             isDescending = false;
 
             // toggle colour
             resetBtnColor();
-            // var nextColor = this.style.background == "#82888f" ? "#373640" : "#82888f";
-            // d3.select(this).style("background", nextColor);
             highlightBtn(this, "#877abf");
 
             sortAscending(dataOption, sortNum);
@@ -1246,7 +1191,6 @@ function initializeData() {
                 d.unemploymentRate = +d.unemploymentRate;
                 d.majorCategory = d.majorCategory;
             });
-            // console.log(data);
             render(data);
         })
 }

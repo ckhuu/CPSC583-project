@@ -103,12 +103,6 @@ body {
     overflow-y: hidden;
 }
 
-/*#header {*/
-/*    min-height: 80px;*/
-/*    overflow-x: hidden;*/
-/*    padding-bottom: 10px;*/
-/*}*/
-
 .datadiv {
     box-sizing: border-box;
 }
